@@ -1,1 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <stdlib.h>
 
+using namespace std;
+
+// Структура для представления отрезка
+struct Segment {
+    double start;
+    double end;
+};
+
+// Рекурсивная функция для генерации множества Кантора
+void cantorSet(vector<Segment>& segments, double start, double end, int n, int& counter, int maxDepth) {
+    // Увеличиваем счетчик при каждом вызове
+    counter++;
+
+    // Проверяем, не превысили ли мы максимальную глубину рекурсии
+    if (counter > maxDepth) {
+        cout << "Превышена максимальная глубина рекурсии!" << endl;
+        exit(1);
+    }
+
+    // Базовый случай: достигли максимальной глубины рекурсии, добавляем отрезок
+    if (n == 0) {
+        segments.push_back({start, end});
+        return;
+    }
+
+    // Вычисляем длину отрезка и координаты третей
+    double length = end - start;
+    double third1 = start + length / 3.0;
+    double third2 = end - length / 3.0;
+
+    // Рекурсивно вызываем функцию для левой и правой частей
+    cantorSet(segments, start, third1, n - 1, counter, maxDepth);
+    cantorSet(segments, third2, end, n - 1, counter, maxDepth);
+}
+
+int main() {
+    int n, maxDepth = 1000;
+    cout << "Введите количество итераций для множества Кантора: ";
+    cin >> n;
+
+    vector<Segment> segments;
+    int recursionCounter = 0;
+    cantorSet(segments, 0.0, 1.0, n, recursionCounter, maxDepth);
+
+    cout << "Отрезки, составляющие множество Кантора:" << endl;
+    for (auto& segment : segments) {
+        cout << "[" << segment.start << ", " << segment.end << "]" << endl;
+    }
+
+    return 0;
+}
