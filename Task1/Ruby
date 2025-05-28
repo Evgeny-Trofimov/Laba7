@@ -1,0 +1,26 @@
+# Рекурсивная функция для генерации множества Кантора
+def cantor(start, end_, n, max_depth, depth = 0)
+  if depth > max_depth
+    puts "Достигнута максимальная глубина рекурсии!"
+    return []
+  end
+
+  return [[start, end_]] if n == 0
+
+  length = end_ - start
+  left_end = start + length / 3
+  right_start = end_ - length / 3
+
+  cantor(start, left_end, n - 1, max_depth, depth + 1) + 
+  cantor(right_start, end_, n - 1, max_depth, depth + 1)
+end
+
+# Основная программа
+print "Введите количество итераций: "
+n = gets.to_i
+
+max_depth = 1000
+segments = cantor(0.0, 1.0, n, max_depth)
+
+puts "Отрезки множества Кантора:"
+segments.each { |s| puts "[#{s[0]}, #{s[1]}]" }
