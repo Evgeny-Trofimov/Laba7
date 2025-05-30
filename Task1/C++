@@ -27,7 +27,7 @@ void cantorSet(vector<Segment>& segments, double start, double end, int n, int& 
         return;
     }
 
-    // Вычисляем длину отрезка и координаты третей
+    // Вычисляем длины отрезков
     double length = end - start;
     double third1 = start + length / 3.0;
     double third2 = end - length / 3.0;
