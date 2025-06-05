@@ -21,7 +21,7 @@ void cantorSet(vector<Segment>& segments, double start, double end, int n, int& 
         exit(1);
     }
 
-    // Базовый случай: достигли максимальной глубины рекурсии, добавляем отрезок
+    // Базовый случай.
     if (n == 0) {
         segments.push_back({start, end});
         return;
