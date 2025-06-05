@@ -8,8 +8,8 @@ int recursion_counter = 0;
 const int MAX_RECURSION_DEPTH = 1000;
 
 // Функция для проверки наличия слова в словаре
-bool contains(const vector<string>& dict, const string& word) {
-    for (const string& w : dict) {
+bool contains(const vector<string> dict, const string word) {
+    for (const string w : dict) {
         if (w == word) {
             return true;
         }
@@ -17,7 +17,7 @@ bool contains(const vector<string>& dict, const string& word) {
     return false;
 }
 
-bool wordBreak(const string& s, const vector<string>& wordDict) {
+bool wordBreak(const string s, const vector<string> wordDict) {
     recursion_counter++;
     if (recursion_counter > MAX_RECURSION_DEPTH) {
         cout << "Превышена максимальная глубина рекурсии!" << endl;
