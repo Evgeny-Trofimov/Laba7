@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
-#include <stdlib.h>
+#include <SFML/Graphics.hpp>
 
 using namespace std;
+using namespace sf;
 
 // Структура для представления отрезка
 struct Segment {
@@ -12,27 +13,22 @@ struct Segment {
 
 // Рекурсивная функция для генерации множества Кантора
 void cantorSet(vector<Segment>& segments, double start, double end, int n, int& counter, int maxDepth) {
-    // Увеличиваем счетчик при каждом вызове
     counter++;
 
-    // Проверяем, не превысили ли мы максимальную глубину рекурсии
     if (counter > maxDepth) {
         cout << "Превышена максимальная глубина рекурсии!" << endl;
-        exit(1);
+        return;
     }
 
-    // Базовый случай.
     if (n == 0) {
         segments.push_back({start, end});
         return;
     }
 
-    // Вычисляем длины отрезков
     double length = end - start;
     double third1 = start + length / 3.0;
     double third2 = end - length / 3.0;
 
-    // Рекурсивно вызываем функцию для левой и правой частей
     cantorSet(segments, start, third1, n - 1, counter, maxDepth);
     cantorSet(segments, third2, end, n - 1, counter, maxDepth);
 }
@@ -46,9 +42,43 @@ int main() {
     int recursionCounter = 0;
     cantorSet(segments, 0.0, 1.0, n, recursionCounter, maxDepth);
 
-    cout << "Отрезки, составляющие множество Кантора:" << endl;
-    for (auto& segment : segments) {
-        cout << "[" << segment.start << ", " << segment.end << "]" << endl;
+    // Создаем окно для графического вывода
+    RenderWindow window(VideoMode(800, 600), "Множество Кантора");
+    window.setFramerateLimit(60);
+
+    // Основной цикл отрисовки
+    while (window.isOpen()) {
+        Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == Event::Closed)
+                window.close();
+        }
+
+        window.clear(Color::White);
+
+        // Рисуем отрезки множества Кантора
+        float y_pos = 50.f;
+        float level_height = 50.f;
+        float scale = 700.f; // Масштаб для визуализации
+
+        for (int level = 0; level <= n; level++) {
+            // Находим все отрезки текущего уровня
+            vector<Segment> current_level;
+            int temp_counter = 0;
+            cantorSet(current_level, 0.0, 1.0, level, temp_counter, maxDepth);
+
+            // Рисуем отрезки текущего уровня
+            for (auto& segment : current_level) {
+                RectangleShape line(Vector2f((segment.end - segment.start) * scale, 5.f));
+                line.setPosition(50 + segment.start * scale, y_pos);
+                line.setFillColor(Color::Black);
+                window.draw(line);
+            }
+
+            y_pos += level_height;
+        }
+
+        window.display();
     }
 
     return 0;
