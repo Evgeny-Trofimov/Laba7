@@ -27,7 +27,7 @@ bool canPlaceItems(vector<int>& items, vector<int>& containers, int H, int index
             if (canPlaceItems(items, containers, H, index + 1)) {
                 return true;
             }
-            // Откатываем изменения (бэктрекинг)
+            // Откатываем изменения 
             containers[i] -= items[index];
         }
     }
